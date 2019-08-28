@@ -6,7 +6,7 @@ class CItemOffset : public CWndMenuItem
 	int m_nVolt;
 
 public:
-	virtual void Create(const char* pszId, ui16 clr, ui8 rows, CWnd *pParent) 
+	virtual void Create(const char* pszId, ui16 clr, ui8 rows, CWnd *pParent)
 	{
 		m_nVolt = 10;
 		CWndMenuItem::Create(pszId, clr, rows, pParent);
@@ -17,13 +17,13 @@ public:
 		{
 			m_nVolt--;
 			Invalidate();
-			SendMessage(m_pParent, ToWord('i', 'u'), NULL);
+			SendMessage(m_pParent, ToWord('i', 'u'), 0);
 		}
 		if ( nKey & BIOS::KEY::KeyRight && m_nVolt < 20 )
 		{
 			m_nVolt++;
 			Invalidate();
-			SendMessage(m_pParent, ToWord('i', 'u'), NULL);
+			SendMessage(m_pParent, ToWord('i', 'u'), 0);
 		}
 		CWndMenuItem::OnKey( nKey );
 	}
@@ -31,9 +31,9 @@ public:
 	{
 		CWndMenuItem::OnPaint();
 
-		//BIOS::LCD::Printf( m_rcClient.left + 12 + 16, m_rcClient.top + 16, RGB565(000000), RGBTRANS, "%1f V", 
+		//BIOS::LCD::Printf( m_rcClient.left + 12 + 16, m_rcClient.top + 16, RGB565(000000), RGBTRANS, "%1f V",
 		//	m_nVolt/10.0f+0.01f ); // rounding error!?
-		BIOS::LCD::Printf( m_rcClient.left + 12 + 16, m_rcClient.top + 16, RGB565(000000), RGBTRANS, "%d%%", 
+		BIOS::LCD::Printf( m_rcClient.left + 12 + 16, m_rcClient.top + 16, RGB565(000000), RGBTRANS, "%d%%",
 			m_nVolt*5 );
 	}
 	float GetOffset()

@@ -94,7 +94,7 @@ public:
 			nLastSend = BIOS::SYS::GetTick();
 			char msg[20];
 			BIOS::DBG::sprintf(msg, "\nGeiger=%d\n", m_nCounter);
-			BIOS::SERIAL::Send(msg);  
+			BIOS::SERIAL::Send(msg);
 			BIOS::DBG::sprintf(msg, "Rate=%f\n", fRate);
 			BIOS::SERIAL::Send(msg);
 		}
@@ -125,7 +125,7 @@ public:
 				}
 				num[1] +=nC;
 			}
-			BIOS::LCD::Print( 20 + (i%10)*30, 100+(i/10)*16, RGB565(ffffff), i==nSlot ? RGB565(0000b0) : RGB565(000000), num );	
+			BIOS::LCD::Print( 20 + (i%10)*30, 100+(i/10)*16, RGB565(ffffff), i==nSlot ? RGB565(0000b0) : RGB565(000000), num );
 		}
 		int lPassed = BIOS::SYS::GetTick() - lTick;
 

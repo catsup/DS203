@@ -13,6 +13,8 @@
 #include <Source/Library/Cookies.h>
 #define MaxLines 14
 
+#define stricmp strcasecmp	/* XXX */
+
 int nSelected = -1;
 int nScroll = 0;
 
@@ -186,7 +188,7 @@ void CWndUserManager::OnPaint()
 	{
 		if ( i + nScroll >= m_arrFiles.GetSize() )
 			break;
-		
+
 		BIOS::FAT::TFindFile& fileInfo = m_arrFiles[i+nScroll];
 		DrawLine( fileInfo, y, (nSelected == i+nScroll) );
 		y += 14;
@@ -213,7 +215,7 @@ void CWndUserManager::DrawProgress()
 		nPercentTop = nScroll * 1024 / m_arrFiles.GetSize();
 		nPercentBottom = (nScroll + MaxLines) * 1024 / m_arrFiles.GetSize();
 		clr = RGB565(ffffff);
-	} 
+	}
 	CRect rcRange;
 	rcRange.left = rcProgress.left + 2;
 	rcRange.right = rcProgress.right - 2;
@@ -284,12 +286,12 @@ void CWndUserManager::DrawLine( BIOS::FAT::TFindFile& fileInfo, int y, bool bSel
 	ui16 clrBack = bSelected ? RGB565(00b0b0) : RGB565(0000b0);
 	BIOS::LCD::Bar( 0, y, /*320*/400-8, y+14, clrBack );
 
-	if ( stricmp( strExt, "hex" ) == 0 || stricmp( strExt, "elf" ) == 0 || 
+	if ( stricmp( strExt, "hex" ) == 0 || stricmp( strExt, "elf" ) == 0 ||
 		 stricmp( strExt, "adr" ) == 0 || stricmp( strExt, "exe" ) == 0 )
 	{
 		clr = RGB565(00ff00);
 	}
-		
+
 	BIOS::LCD::Print( 4, y, clr, clrBack, strFile);
 	if ( strExt[0] )
 		BIOS::LCD::Print( 4+9*8+4, y, clr, clrBack, strExt);
@@ -301,7 +303,7 @@ void CWndUserManager::DrawLine( BIOS::FAT::TFindFile& fileInfo, int y, bool bSel
 		strcpy(strAux, "Folder");
 	else if ( fileInfo.nFileLength < 1000000 )
 		BIOS::DBG::sprintf( strAux, "%6d", fileInfo.nFileLength );
-	else 
+	else
 		BIOS::DBG::sprintf( strAux, "%5dk", fileInfo.nFileLength/1024 );
 
  	BIOS::LCD::Print( 4+15*8-4, y, clr, clrBack, strAux);
@@ -314,7 +316,7 @@ void CWndUserManager::DrawLine( BIOS::FAT::TFindFile& fileInfo, int y, bool bSel
 		BIOS::DBG::sprintf( strAux, "%02d:%02d", (fileInfo.nTime>>11), (fileInfo.nTime>>5)&63);
 		BIOS::LCD::Print( 4+32*8+4, y, clr, clrBack, strAux);
 	}
-	
+
 	if ( CheckModule( fileInfo.strName, fileInfo.nFileLength, strAux ) )
 	{
 		BIOS::LCD::Print( 4+39*8, y, clr, clrBack, strAux);
@@ -335,7 +337,7 @@ void CWndUserManager::DrawLine( BIOS::FAT::TFindFile& fileInfo, int y, bool bSel
 
 void CWndUserManager::OnKey(ui16 nKey)
 {
-	if ( nKey == BIOS::KEY::KeyDown ) 
+	if ( nKey == BIOS::KEY::KeyDown )
 	{
 		if ( nSelected + 1 < m_arrFiles.GetSize() )
 		{
@@ -354,7 +356,7 @@ void CWndUserManager::OnKey(ui16 nKey)
 			}
 		}
 	}
-	if ( nKey == BIOS::KEY::KeyUp ) 
+	if ( nKey == BIOS::KEY::KeyUp )
 	{
 		nSelected--;
 		if ( nSelected == -1 )
@@ -451,8 +453,8 @@ void CWndUserManager::OnMessage(CWnd* pSender, ui16 code, ui32 data)
 		Settings.Trig.Sync = CSettings::Trigger::_None; // disable sampling
 		BIOS::ADC::Enable( false );
 
-		//test: CCookies::SetCookie( "gui.manager.last", "pmos129/appl2.elf" ); 
-		char* pLastFile = CCookies::GetCookie( (char*)"gui.manager.last" ); 
+		//test: CCookies::SetCookie( "gui.manager.last", "pmos129/appl2.elf" );
+		char* pLastFile = CCookies::GetCookie( (char*)"gui.manager.last" );
 		char strLastFile[32];
 		if ( pLastFile )
 		{
@@ -463,7 +465,7 @@ void CWndUserManager::OnMessage(CWnd* pSender, ui16 code, ui32 data)
 			memcpy( strLastFile, pLastFile, nLen );
 			strLastFile[nLen] = 0;
 
-			CCookies::SetCookie( (char*)"gui.manager.last", (char*)"" ); 
+			CCookies::SetCookie( (char*)"gui.manager.last", (char*)"" );
 
 			char* pPathEnd = strrchr( strLastFile, '/' );
 			if ( pPathEnd == NULL )
@@ -560,7 +562,7 @@ void CWndUserManager::Exec(char* strPath, char* strFile, int nLength)
 			}
 			if ( IsModuleLoaded( strFile, nLength, dwEntry, dwBegin, dwEnd ) )
 			{
-				CCookies::SetCookie( (char*)"gui.manager.last", strFullName ); 
+				CCookies::SetCookie( (char*)"gui.manager.last", strFullName );
 				Settings.Save();
 				BIOS::SYS::Execute( dwEntry );
 				// on win32 it continues...
@@ -576,7 +578,7 @@ void CWndUserManager::Exec(char* strPath, char* strFile, int nLength)
 					MainWnd.m_wndMessage.Show(this, "Manager", "Failed to execute!", RGB565(FF0000));
 				} else
 				{
-					CCookies::SetCookie( (char*)"gui.manager.last", strFullName ); 
+					CCookies::SetCookie( (char*)"gui.manager.last", strFullName );
 					Settings.Save();
 					BIOS::SYS::Execute( dwEntry );
 					// on win32 it continues... file buffer was corrupted by linear flashing
@@ -596,7 +598,7 @@ void CWndUserManager::Exec(char* strPath, char* strFile, int nLength)
 		}
 		if ( IsModuleLoaded( strFile, nLength, dwEntry, dwBegin, dwEnd ) )
 		{
-			CCookies::SetCookie( (char*)"gui.manager.last", strFullName ); 
+			CCookies::SetCookie( (char*)"gui.manager.last", strFullName );
 			Settings.Save();
 			BIOS::SYS::Execute( dwEntry );
 			// on win32 it continues...
@@ -612,7 +614,7 @@ void CWndUserManager::Exec(char* strPath, char* strFile, int nLength)
 				MainWnd.m_wndMessage.Show(this, "Manager", "Failed to execute!", RGB565(FF0000));
 			} else
 			{
-				CCookies::SetCookie( (char*)"gui.manager.last", strFullName ); 
+				CCookies::SetCookie( (char*)"gui.manager.last", strFullName );
 				Settings.Save();
 				BIOS::SYS::Execute( dwEntry );
 				// on win32 it continues...
@@ -659,14 +661,14 @@ bool CWndUserManager::HexLoad(char* strFile)
 	if ( !fw.Open( strFile ) )
 		return false;
 
-	IHexRecord irec;	
+	IHexRecord irec;
 	uint16_t addressOffset = 0x00;
 	uint32_t address = 0x0;
 	int ihexError;
 	int err;
 	BIOS::MEMORY::LinearStart();
 
-	while ((ihexError = Read_IHexRecord(&irec, fw)) == IHEX_OK) 
+	while ((ihexError = Read_IHexRecord(&irec, fw)) == IHEX_OK)
 	{
 		switch(irec.type)
 		{
@@ -682,7 +684,7 @@ bool CWndUserManager::HexLoad(char* strFile)
 			break;
 
 			case IHEX_TYPE_04:    /**< Extended Linear Address Record */
-				addressOffset = (((uint16_t) irec.data[0]) << 8 ) + irec.data[1];		
+				addressOffset = (((uint16_t) irec.data[0]) << 8 ) + irec.data[1];
 			break;
 
 			case IHEX_TYPE_01:    /**< End of File Record */
@@ -711,13 +713,13 @@ bool CWndUserManager::HexGetInfo(char* strFile, ui32& dwEntry, ui32& dwBegin, ui
 	if ( !fw.Open( strFile ) )
 		return false;
 
-	IHexRecord irec;	
+	IHexRecord irec;
 	uint16_t addressOffset = 0x00;
 	uint32_t address = 0x0;
 	int ihexError;
 	ui32 dwAddrLow = (ui32)-1, dwAddrHigh = -1;
 
-	while ((ihexError = Read_IHexRecord(&irec, fw)) == IHEX_OK) 
+	while ((ihexError = Read_IHexRecord(&irec, fw)) == IHEX_OK)
 	{
 		switch(irec.type)
 		{
@@ -736,7 +738,7 @@ bool CWndUserManager::HexGetInfo(char* strFile, ui32& dwEntry, ui32& dwBegin, ui
 			break;
 
 			case IHEX_TYPE_04:    /**< Extended Linear Address Record */
-				addressOffset = (((uint16_t) irec.data[0]) << 8 ) + irec.data[1];		
+				addressOffset = (((uint16_t) irec.data[0]) << 8 ) + irec.data[1];
 			break;
 
 			case IHEX_TYPE_01:    /**< End of File Record */
@@ -855,9 +857,9 @@ bool CWndUserManager::FpgaLoad(char* strFile)
 	strLine[10] = 0;
 	if ( strLine[0] != '0' || strLine[1] != 'x' )
 		return false;
-	
+
 	ui32 dwAddr = CUtils::htoi( strLine+2 );
-	
+
 	pExt = strrchr( strFile, '.');
 	if ( !pExt )
 		return false;
@@ -906,9 +908,9 @@ bool CWndUserManager::FpgaGetInfo(char* strFile, ui32& dwBegin, ui32& dwEnd)
 	strLine[10] = 0;
 	if ( strLine[0] != '0' || strLine[1] != 'x' )
 		return false;
-	
+
 	dwBegin = CUtils::htoi( strLine+2 );
-	
+
 	pExt = strrchr( strFile, '.');
 	if ( !pExt )
 		return false;
@@ -969,7 +971,7 @@ bool CWndUserManager::CheckModule( char* strName, int nLength, char* strLoaded )
 	strcpy( strLoaded, "" );
 	for ( int i=0; i < m_arrLoaded.GetSize(); i++)
 	{
-		TLoadedModule& mod = m_arrLoaded[i]; 
+		TLoadedModule& mod = m_arrLoaded[i];
 		if ( strcmp( strName, mod.strFileName ) != 0 )
 			continue;
 		if ( (int)mod.dwFileLength != nLength )
@@ -999,7 +1001,7 @@ bool CWndUserManager::CheckModule( char* strName, int nLength, char* strLoaded )
 			chSlotBegin = '3';
 		else if ( mod.dwBegin == 0x08024000 )
 			chSlotBegin = '4';
-		
+
 		if ( mod.dwEnd >= 0x0802C000 )
 			chSlotEnd = 'X';
 		else if ( mod.dwEnd >= 0x08024000 )
@@ -1015,7 +1017,7 @@ bool CWndUserManager::CheckModule( char* strName, int nLength, char* strLoaded )
 			BIOS::DBG::sprintf( strLoaded, "Slot %c", chSlotBegin );
 		else if ( chSlotBegin == '?' )
 			strcpy( strLoaded, "Loaded" );
-		else 
+		else
 			BIOS::DBG::sprintf( strLoaded, "Slot %c-%c", chSlotBegin, chSlotEnd );
 		break;
 	}
@@ -1041,7 +1043,7 @@ bool CWndUserManager::IsModuleLoaded( char* strName, int nLength, ui32 dwEntry, 
 {
 	for ( int i=0; i < m_arrLoaded.GetSize(); i++)
 	{
-		TLoadedModule& mod = m_arrLoaded[i]; 
+		TLoadedModule& mod = m_arrLoaded[i];
 		if ( strcmp(mod.strFileName, strName) == 0 && (int)mod.dwFileLength == nLength &&
 			mod.dwBegin == dwBegin && mod.dwEnd == dwEnd && mod.dwEntry == dwEntry )
 		{
@@ -1059,7 +1061,7 @@ bool CWndUserManager::CheckModuleConflict( ui32 dwBegin, ui32 dwEnd )
 
 	for ( int i=0; i < m_arrLoaded.GetSize(); i++)
 	{
-		TLoadedModule& mod = m_arrLoaded[i]; 
+		TLoadedModule& mod = m_arrLoaded[i];
 		if (!( mod.dwEnd < dwBegin || mod.dwBegin > dwEnd ))
 		{
 			// conflicting record

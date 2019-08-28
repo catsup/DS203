@@ -24,7 +24,7 @@ public:
 	virtual void OnPaint()
 	{
 		CDesign::Window( m_rcClient, m_clrFrame );
-		BIOS::LCD::Print( m_rcClient.CenterX()-((ui8)strlen(m_pszId)<<2), m_rcClient.top+2, 
+		BIOS::LCD::Print( m_rcClient.CenterX()-((ui8)strlen(m_pszId)<<2), m_rcClient.top+2,
 			RGB565(000000), RGBTRANS, m_pszId);
 	}
 
@@ -86,7 +86,7 @@ public:
 	ui8 m_nRows;
 
 public:
-	virtual void Create(const char* pszId, ui16 clr, ui8 rows, CWnd *pParent) 
+	virtual void Create(const char* pszId, ui16 clr, ui8 rows, CWnd *pParent)
 	{
 		m_pClr = NULL;
 		m_clr = clr;
@@ -107,7 +107,7 @@ public:
 		CWnd::Create( pszId, WsVisible, rcRect, pParent );
 	}
 
-	virtual void Create(const char* pszId, ui16 clr, CRect& rcRect, CWnd *pParent) 
+	virtual void Create(const char* pszId, ui16 clr, CRect& rcRect, CWnd *pParent)
 	{
 		m_pClr = NULL;
 		m_clr = clr;
@@ -124,7 +124,7 @@ public:
 	{
 		if ( m_pClr )
 			m_clr = *m_pClr;
-		
+
 		//BIOS::LCD::Bar(m_rcClient, RGB565(000000));
 		// reduce annoying blinking
 		if ( HasFocus() )
@@ -163,7 +163,7 @@ public:
 	ui16 m_clr;
 
 public:
-	virtual void Create( const char* pszId, ui16 clr, CRect& rcRect, CWnd *pParent ) 
+	virtual void Create( const char* pszId, ui16 clr, CRect& rcRect, CWnd *pParent )
 	{
 		m_clr = clr;
 		CWnd::Create( pszId, WsVisible, rcRect, pParent );
@@ -195,7 +195,7 @@ public:
 	const void* m_pImage;
 
 public:
-	virtual void Create( const char* pszId, ui16 clr, CRect& rcRect, CWnd *pParent, const void* pImage ) 
+	virtual void Create( const char* pszId, ui16 clr, CRect& rcRect, CWnd *pParent, const void* pImage )
 	{
 		m_pImage = pImage;
 		m_clr = clr;
@@ -272,19 +272,19 @@ public:
 	virtual void Set(ui32 value) { _ASSERT(0); }
 	virtual ui32 Get() { return Invalid; }
 };
-	
+
 class CLStaticItem : public CListItem
 {
 public:
 	virtual void OnPaint()
 	{
 		ui16 clr = HasFocus() ? RGB565(ffffff) : RGB565(000000);
-		
+
 		CListItem::OnPaint();
 
 		int x = m_rcClient.left+4;
 		BIOS::LCD::Print( x, m_rcClient.top, clr, RGBTRANS, m_pszId);
-	}	
+	}
 };
 
 class CLSpacer : public CListItem
@@ -311,7 +311,7 @@ public:
 	}
 	virtual void OnPaint()
 	{
-	}	
+	}
 };
 
 class CLPItem : public CListItem
@@ -328,14 +328,14 @@ public:
 	virtual void OnPaint()
 	{
 		ui16 clr = HasFocus() ? RGB565(ffffff) : RGB565(000000);
-		
+
 		CListItem::OnPaint();
 
 		int x = m_rcClient.left+4;
 		BIOS::LCD::Print( x, m_rcClient.top, clr, RGBTRANS, m_pszId);
-	
+
 		x = m_rcClient.left + 120;
-		
+
 		CValueProvider::VPNavigate prev = (*m_pProvider)-1;
 		CValueProvider::VPNavigate next = (*m_pProvider)+1;
 
@@ -348,14 +348,14 @@ public:
 		rcItem = m_rcClient;
 		rcItem.left = x;
 		rcItem.right = rcItem.left;	// force to recompute
-		
+
 		m_pProvider->OnPaint(rcItem, HasFocus());
 		x += m_pProvider->GetWidth();
 		if (next == CValueProvider::Yes)
 			x += BIOS::LCD::Draw( x, m_rcClient.top, clr, RGBTRANS, CShapes::more_right );
 		else if (next == CValueProvider::No)
 			x += BIOS::LCD::Draw( x, m_rcClient.top, RGB565(808080), RGBTRANS, CShapes::more_right );
-	}	
+	}
 
 	virtual void OnKey(ui16 nKey)
 	{
@@ -408,7 +408,7 @@ public:
 		CRect rcClient = m_rcClient;
 		CDesign::WindowSelector(m_rcClient, m_clrFrame);
 
-		BIOS::LCD::Print( rcClient.CenterX()-((ui8)strlen(m_pszId)<<2), rcClient.top+2, 
+		BIOS::LCD::Print( rcClient.CenterX()-((ui8)strlen(m_pszId)<<2), rcClient.top+2,
 			RGB565(000000), RGBTRANS, m_pszId);
 		BIOS::LCD::Draw( m_rcClient.left + 6, m_rcClient.top+20, RGB565(000000), RGBTRANS, CShapes::more_left );
 		BIOS::LCD::Draw( m_rcClient.right - 3 - 6, m_rcClient.top+20, RGB565(000000), RGBTRANS, CShapes::more_right );
@@ -421,7 +421,7 @@ public:
 
 		BIOS::RoundRect(rcClient, m_clrFrame);
 
-		BIOS::Print( rcClient.CenterX()-((ui8)strlen(m_pszId)<<2), rcClient.top, 
+		BIOS::Print( rcClient.CenterX()-((ui8)strlen(m_pszId)<<2), rcClient.top,
 			RGB565(000000), RGBTRANS, m_pszId);
 
 		BIOS::Draw( m_rcClient.left + 4, m_rcClient.top+18, RGB565(000000), RGBTRANS, more_left );
@@ -444,11 +444,11 @@ public:
 			_ASSERT( (*m_pProvider)+1 == CValueProvider::Yes );
 			(*m_pProvider)++;
 		}
-		
+
 		// zmesti sa nam to bez scrollovania ?
 		nFocusBase += m_pProvider->GetWidth() + 8;
 
-		m_pProvider->Set(0); 
+		m_pProvider->Set(0);
 
 		while ( nFocusBase > rcClient.Width() )
 		{
@@ -472,7 +472,7 @@ public:
 				BIOS::LCD::Bar( rcBack, RGB565(000000) );
 				BIOS::LCD::Draw( rcClient.left-8, rcClient.top, RGB565(000000), RGBTRANS, CShapes::sel_left );
 			}
-				
+
 			m_pProvider->OnPaint( rcClient, bFocus );
 			rcClient.left += nWidth;
 
@@ -512,14 +512,14 @@ public:
 	}
 
 };
-		
+
 
 class CItemProvider : public CWndMenuItem
 {
 	CValueProvider*	m_pProvider;
 
 public:
-	virtual void Create(CValueProvider*	pProvider, const char* pszId, ui16 clr, CWnd *pParent) 
+	virtual void Create(CValueProvider*	pProvider, const char* pszId, ui16 clr, CWnd *pParent)
 	{
 		_ASSERT( pProvider );
 		m_pProvider = pProvider;
@@ -541,10 +541,10 @@ public:
 		{
 			rcItem.left -= 8;
 			rcItem.left += BIOS::LCD::Draw(rcItem.left, rcItem.top, RGB565(0000000), RGBTRANS, CShapes::sel_left);
-			
+
 			ui16 nWidth = m_pProvider->GetWidth();
 			BIOS::LCD::Bar( rcItem.left, rcItem.top, rcItem.left + nWidth, rcItem.top + 14, RGB565(000000));
-			
+
 			m_pProvider->OnPaint( rcItem, 1 );
 			rcItem.left += nWidth;
 			rcItem.left += BIOS::LCD::Draw(rcItem.left, rcItem.top, RGB565(0000000), RGBTRANS, CShapes::sel_right);
@@ -561,13 +561,13 @@ public:
 		{
 			(*m_pProvider)--;
 			Invalidate();
-			SendMessage(m_pParent, ToWord('i', 'u'), NULL);
+			SendMessage(m_pParent, ToWord('i', 'u'), 0);
 		}
 		if ( nKey & BIOS::KEY::KeyRight && *m_pProvider + 1 == CValueProvider::Yes )
 		{
 			(*m_pProvider)++;
 			Invalidate();
-			SendMessage(m_pParent, ToWord('i', 'u'), NULL);
+			SendMessage(m_pParent, ToWord('i', 'u'), 0);
 		}
 		CWnd::OnKey( nKey );
 	}
@@ -587,7 +587,7 @@ public:
 	virtual void OnPaint()
 	{
 		ui16 clr = HasFocus() ? RGB565(ffffff) : RGB565(000000);
-			
+
 		if ( HasFocus() )
 		{
 			CRect rcHighlight( m_rcClient );
@@ -604,7 +604,7 @@ public:
 
 		if ( HasFocus() )
 			BIOS::LCD::Draw( x, m_rcClient.top, clr, RGBTRANS, CShapes::more_right );
-	}	
+	}
 
 	virtual void OnKey(ui16 nKey)
 	{
@@ -699,11 +699,11 @@ public:
 	{
 		_ASSERT( m_pNumber );
 		ui16 clr = bFocus ? RGB565(ffffff) : RGB565(000000);
-		int nDigit = ((*m_pNumber) / m_nStep) % 10;
-		char strDigit[2] = { '0'+nDigit, 0 };
+		char nDigit = '0'+(((*m_pNumber) / m_nStep) % 10);
+		char strDigit[2] = { nDigit, 0 };
 
 		BIOS::LCD::Print( rcRect.left, rcRect.top, clr, RGBTRANS, strDigit);
-	}	
+	}
 
 	virtual ui16 GetWidth()
 	{

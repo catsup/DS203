@@ -85,9 +85,9 @@ void Assert(const char*msg, int n)
   if(Vb > 3900 ) Level +=1;
   if(Vb > 4100 ) Level +=1;
 */
-                          
+
 	// 3000 -> 10%
-	// 4300 -> 100%         
+	// 4300 -> 100%
 	int nPerc = 10+(Vb-3000)*(100-10)/(4300-3000);
 	if ( nPerc < 0 )
 		return 0;
@@ -115,7 +115,7 @@ void Assert(const char*msg, int n)
 #define APP2_BASE ((u32)(0x08014000)) // Size = 32KB
 #define APP1_BASE ((u32)(0x0800C000)) // Size = 32KB
 #define SYS_BASE ((u32)(0x08004000)) // Size = 32KB
-#define DFU_BASE ((u32)(0x08000000)) // Size = 16KB 
+#define DFU_BASE ((u32)(0x08000000)) // Size = 16KB
 
 int BIOS::SYS::Execute( int nCode )
 {
@@ -275,29 +275,29 @@ void RCC_APB2PeriphClockCmd(u32 RCC_APB2Periph, FunctionalState NewState)
 
 int BIOS::SYS::GetTemperature()
 {
-//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE); 
+//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 #if 0
   ADC_InitTypeDef ADC_InitStructure;
   /* ADC1 configuration ------------------------------------------------------*/
-  ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;	 
-  ADC_InitStructure.ADC_ScanConvMode = DISABLE;			  
-  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;	 
-  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None; 
-  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;		   
+  ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
+  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
   ADC_InitStructure.ADC_NbrOfChannel = 1;
   ADC_Init(ADC1, &ADC_InitStructure);
 
 #endif
-  /* ADC1 regular channe16 configuration */ 
-  //ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_239Cycles5);  
-  /* Enable the temperature sensor and vref internal channel */ 
-  ADC_TempSensorVrefintCmd(ENABLE);    
+  /* ADC1 regular channe16 configuration */
+  //ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_239Cycles5);
+  /* Enable the temperature sensor and vref internal channel */
+  ADC_TempSensorVrefintCmd(ENABLE);
   /* Enable ADC1 */
 //  ADC_Cmd(ADC1, ENABLE);
 //  BIOS::SYS::DelayMs(5);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_55Cycles5);  
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_55Cycles5);
   BIOS::SYS::DelayMs(1);
-  ADC_SoftwareStartConvCmd(ADC1, ENABLE);	
+  ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC)!=SET);
 
 	int ADCConvertedValue = ADC_GetConversionValue(ADC1);
@@ -311,29 +311,29 @@ int BIOS::SYS::GetTemperature()
 
 int BIOS::SYS::GetCoreVoltage()
 {
-//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE); 
+//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 #if 0
   ADC_InitTypeDef ADC_InitStructure;
   /* ADC1 configuration ------------------------------------------------------*/
-  ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;	 
-  ADC_InitStructure.ADC_ScanConvMode = DISABLE;			  
-  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;	 
-  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None; 
-  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;		   
+  ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
+  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
   ADC_InitStructure.ADC_NbrOfChannel = 1;
   ADC_Init(ADC1, &ADC_InitStructure);
 #endif
 
-  /* ADC1 regular channe16 configuration */ 
-  //ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_239Cycles5);  
-  /* Enable the temperature sensor and vref internal channel */ 
-  ADC_TempSensorVrefintCmd(ENABLE);    
+  /* ADC1 regular channe16 configuration */
+  //ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_239Cycles5);
+  /* Enable the temperature sensor and vref internal channel */
+  ADC_TempSensorVrefintCmd(ENABLE);
   /* Enable ADC1 */
 //  ADC_Cmd(ADC1, ENABLE);
 //  BIOS::SYS::DelayMs(5);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_17, 1, ADC_SampleTime_55Cycles5);  
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_17, 1, ADC_SampleTime_55Cycles5);
   BIOS::SYS::DelayMs(1);
-  ADC_SoftwareStartConvCmd(ADC1, ENABLE);	
+  ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC)!=SET);
 
 	int ADCConvertedValue = ADC_GetConversionValue(ADC1);
@@ -356,8 +356,8 @@ ui32 BIOS::SYS::GetProcAddress(const char* strFuncName )
 	#define EXPORT(f, decl) if ( strcmp( strFuncName, #f ) == 0 ) return (NATIVEPTR)(decl)&f;
 	EXPORT(BIOS::LCD::PutPixel, void (*)(int, int, ui16));
 	EXPORT(BIOS::LCD::Print, int (*)(int, int, ui16, ui16, const char*));
-	EXPORT(BIOS::KEY::GetKeys, ui16 (*)());	
-	EXPORT(BIOS::SYS::Execute, void (*)(int));	
+	EXPORT(BIOS::KEY::GetKeys, ui16 (*)());
+	EXPORT(BIOS::SYS::Execute, void (*)(int));
 	EXPORT(BIOS::LCD::Printf, int (*)(int x, int y, unsigned short clrf, unsigned short clrb, const char * format, ...));
 
 	EXPORT(NVIC_SetVectorTable, void (*)(ui32, ui32));
@@ -368,8 +368,8 @@ ui32 BIOS::SYS::GetProcAddress(const char* strFuncName )
 	#define EXPORT_ALIAS(al, f, decl) if ( strcmp( strFuncName, #al ) == 0 ) return (NATIVEPTR)(decl)&f;
 	EXPORT_ALIAS(PutPixel, BIOS::LCD::PutPixel, void (*)(int, int, ui16));
 	EXPORT_ALIAS(Print, BIOS::LCD::Print, int (*)(int, int, ui16, ui16, const char*));
-	EXPORT_ALIAS(GetKeys, BIOS::KEY::GetKeys, ui16 (*)());	
-	EXPORT_ALIAS(Execute, BIOS::SYS::Execute, void (*)(int));	
+	EXPORT_ALIAS(GetKeys, BIOS::KEY::GetKeys, ui16 (*)());
+	EXPORT_ALIAS(Execute, BIOS::SYS::Execute, void (*)(int));
 	EXPORT_ALIAS(Printf, BIOS::LCD::Printf, int (*)(int x, int y, unsigned short clrf, unsigned short clrb, const char * format, ...));
 
 	EXPORT_ALIAS(gBiosInit, _BiosInit, void (*)());
@@ -382,7 +382,7 @@ ui32 BIOS::SYS::GetProcAddress(const char* strFuncName )
 	EXPORT(BIOS::SYS::Beep, void (*)(int));
 
 	#undef EXPORT
-	return NULL;
+	return 0;
 }
 
 bool BIOS::SYS::IsColdBoot()
@@ -392,7 +392,7 @@ bool BIOS::SYS::IsColdBoot()
   // 0x20000800..0x20001800 can be used by applications
 	if ( m_nColdBoot == -1 )
 	{
-		ui32* pData = (ui32*)0x200017f0; 
+		ui32* pData = (ui32*)0x200017f0;
 		m_nColdBoot = *pData == 0x6ab08a70 ? 0 : 1;
 		*pData = 0x6ab08a70;
 	}

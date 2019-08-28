@@ -70,7 +70,7 @@ public:
 				nSum += Sample.CH1;
 			}
 			nSum /= 256;
-			
+
 			OnWave( nSum );
 			return;
 		}

@@ -11,7 +11,7 @@ class CExport
 {
 #pragma pack(push)
 #pragma pack(2)
-	struct BmpHdr 
+	struct BmpHdr
 	{
 		ui16 wBfType;
 		ui32 dwBfSize;
@@ -37,10 +37,8 @@ class CExport
 public:
 	void FindUnusedFile(char* strName, int nNumbers)
 	{
-		bool bExists;
 		FILEINFO f;
 		do {
-			bExists = false;
 			if ( BIOS::DSK::Open( &f, strName, BIOS::DSK::IoRead ) )
 			{
 				BIOS::DSK::Close( &f );
@@ -73,7 +71,7 @@ public:
 
 		FILEINFO f;
 
-		// strName contains unique non existent file name 
+		// strName contains unique non existent file name
 		if ( !BIOS::DSK::Open( &f, strName, BIOS::DSK::IoWrite ) )
 		{
 			_ASSERT(0);
@@ -115,7 +113,7 @@ public:
 		writer.Open( strName );
 
 		float fTimeRes = Settings.Runtime.m_fTimeRes / CWndGraph::BlkX;
-	
+
 		CSettings::Calibrator::FastCalc fastCalc1, fastCalc2;
 		Settings.CH1Calib.Prepare( &Settings.CH1, fastCalc1 );
 		Settings.CH2Calib.Prepare( &Settings.CH2, fastCalc2 );
@@ -126,7 +124,7 @@ public:
 			unsigned int nValue = BIOS::ADC::GetAt(i);
 			int nCH1 = (ui8)((nValue) & 0xff);
 			int nCH2 = (ui8)((nValue>>8) & 0xff);
-	
+
 			float fTime = fTimeRes * ( i - ( Settings.Trig.nTime - Settings.Time.Shift ) );
 			float fCH1 = Settings.CH1Calib.Voltage( fastCalc1, (float)nCH1 );
 			float fCH2 = Settings.CH2Calib.Voltage( fastCalc2, (float)nCH2 );

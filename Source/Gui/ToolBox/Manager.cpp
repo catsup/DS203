@@ -13,12 +13,12 @@ CWndManager::CWndManager()
 
 void CWndManager::Create( CWnd* pParent )
 {
-	CListBox::Create("Wave Manager", CWnd::WsHidden | CWnd::WsModal, 
+	CListBox::Create("Wave Manager", CWnd::WsHidden | CWnd::WsModal,
 		CRect( (BIOS::LCD::LcdWidth-Width)/2 ,
 		(BIOS::LCD::LcdHeight-Height)/2,
 		(BIOS::LCD::LcdWidth+Width)/2,
-		(BIOS::LCD::LcdHeight+Height)/2 ), 
-		RGB565(8080d0), 
+		(BIOS::LCD::LcdHeight+Height)/2 ),
+		RGB565(8080d0),
 		pParent);
 
 	m_nValue = 0;
@@ -52,10 +52,10 @@ void CWndManager::Cancel()
 void CWndManager::DoModal()
 {
 	m_bRunning = true;
-	
-	OnMessage( &m_itmTabs, ToWord('u', 'p'), NULL );
+
+	OnMessage( &m_itmTabs, ToWord('u', 'p'), 0 );
 	StartModal( &m_itmValue );
-	
+
 	while ( IsRunning() )
 	{
 		Sleep(20);
@@ -99,7 +99,7 @@ bool CWndManager::Exists(char *strName)
 		BIOS::DBG::sprintf( m_strCurrent, strTemplateDisplay[m_itmTabs.GetFocus()], m_nValue );
 		m_itmFile.m_pszId = m_strCurrent;
 		m_itmFile.Invalidate();
-		
+
 		BIOS::DBG::sprintf( strName, strTemplateFile[m_itmTabs.GetFocus()], m_nValue );
 		bool bExists = Exists(strName);
 		// set the flag even when the window is not displayed yet (instead of .IsVisible())
@@ -107,7 +107,7 @@ bool CWndManager::Exists(char *strName)
 		{
 			m_itmLoad.ShowWindow( bExists ? CWnd::SwShow : CWnd::SwHide );
 			Invalidate();
-		} 
+		}
 	}
 	if ( code == ToWord('l', 'e') && data == (NATIVEPTR)&m_proLoad )
 	{

@@ -8,7 +8,7 @@
 class CItemFrequency : public CWndMenuItem
 {
 public:
-	virtual void Create(const char* pszId, ui16 clr, ui8 rows, CWnd *pParent) 
+	virtual void Create(const char* pszId, ui16 clr, ui8 rows, CWnd *pParent)
 	{
 		CWndMenuItem::Create(pszId, clr, rows, pParent);
 	}
@@ -21,7 +21,7 @@ public:
 	}
 */
 	virtual void OnKey(ui16 nKey)
-	{	
+	{
 		if ( !( nKey & BIOS::KEY::KeyLeft ) &&
 			!( nKey & BIOS::KEY::KeyRight ) )
 		{
@@ -101,7 +101,7 @@ public:
 				}
 			}
 			Invalidate();
-			SendMessage(m_pParent, ToWord('i', 'u'), NULL);
+			SendMessage(m_pParent, ToWord('i', 'u'), 0);
 		}
 		CWndMenuItem::OnKey( nKey );
 	}
@@ -116,9 +116,9 @@ public:
 			float fFreq = CPUCLOCK / ( Settings.Gen.nArr + 1 ) / ( Settings.Gen.nPsc + 1 );
 			return fFreq;
 		}
-		if ( Settings.Gen.nSamples <= 0 ) 
+		if ( Settings.Gen.nSamples <= 0 )
 			return 0;
-		float fFreq = CPUCLOCK / 20 / ( Settings.Gen.nArr + 1 ) / Settings.Gen.nSamples; 
+		float fFreq = CPUCLOCK / 20 / ( Settings.Gen.nArr + 1 ) / Settings.Gen.nSamples;
 		return fFreq;
 	}
 
@@ -163,7 +163,7 @@ public:
 		CWndMenuItem::OnPaint();
 		float fFrequency = GetFrequency();
 		fFrequency = (float)(int)fFrequency;
-		BIOS::LCD::Print( m_rcClient.left + 12 + 16, m_rcClient.top + 16, RGB565(000000), RGBTRANS, 
+		BIOS::LCD::Print( m_rcClient.left + 12 + 16, m_rcClient.top + 16, RGB565(000000), RGBTRANS,
 			CUtils::FormatFrequency(fFrequency) );
     // rounding error !?
 	}

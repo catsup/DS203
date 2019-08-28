@@ -41,13 +41,13 @@ public:
 	}
 
 	int GetBit(int nBitIndex, ui32 *pData = NULL)
-	{	
-		if ( pData == NULL ) 
+	{
+		if ( pData == NULL )
 			pData = m_DcfBits;
 
 		int nIndex = nBitIndex/32;
 		int nMask = (1<<(nBitIndex & 31));
-		             
+
 		if ( pData[nIndex] & nMask )
 			return 1;
 		return 0;
@@ -55,7 +55,7 @@ public:
 
 	int GetBits(int nIndex, int nLen, ui32 *pData = NULL)
 	{
-		if ( pData == NULL ) 
+		if ( pData == NULL )
 			pData = m_DcfBits;
 
 		int nMul = 1;
@@ -68,7 +68,7 @@ public:
 
 	int GetParity(int nIndex, int nLen, ui32 *pData = NULL)
 	{
-		if ( pData == NULL ) 
+		if ( pData == NULL )
 			pData = m_DcfBits;
 
 		int nResult = 0;
@@ -114,7 +114,6 @@ public:
 
 	virtual void OnTimer()
 	{
-		static int nLastRedraw = 0;
 		if ( HasOverlay() )
 			return;
 
@@ -122,8 +121,6 @@ public:
 
 		if ( m_bRedraw )
 		{
-			nLastRedraw = nTick;
-
 			static int nMinutes, nHours, nDay, nWDay, nMonth, nYear;
 			struct TDcfItem {
 				const char* strName;
@@ -159,7 +156,7 @@ public:
 				{"year",			50, 8,		&nYear, 		TDcfItem::EYear},
 				{"parity",			58, 1,		NULL, 			TDcfItem::EParity2}
 			};
-			 
+
 			int nIndex = 0;
 			for ( int i=0; i<(int)COUNT(DcfData); i++ )
 			{
@@ -172,33 +169,33 @@ public:
 					nIndex++;
 
 				bool bCurrent = (m_nBitIndex-1) >= DcfItem.nStart && (m_nBitIndex-1) < DcfItem.nStart + DcfItem.nLength;
-				ui16 clrBack = bCurrent ? RGB565(0000b0) : RGB565(000000);	
-				
-				BIOS::LCD::Print( x, y, RGB565(ffffff), clrBack, DcfItem.strName); 
+				ui16 clrBack = bCurrent ? RGB565(0000b0) : RGB565(000000);
+
+				BIOS::LCD::Print( x, y, RGB565(ffffff), clrBack, DcfItem.strName);
 
 				x += 100;
 				int nCurBit = GetBit(DcfItem.nStart);
 				switch ( DcfItem.eType )
 				{
 					case TDcfItem::EAlwaysZero:
-						BIOS::LCD::Print( x+8, y, !nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) ); 
+						BIOS::LCD::Print( x+8, y, !nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) );
 						break;
 					case TDcfItem::EAlwaysOne:
-						BIOS::LCD::Print( x+8, y, nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) ); 
+						BIOS::LCD::Print( x+8, y, nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) );
 						break;
 					case TDcfItem::EBoolean:
-						BIOS::LCD::Print( x+8, y, RGB565(ffffff), clrBack, CUtils::itoa(nCurBit) ); 
+						BIOS::LCD::Print( x+8, y, RGB565(ffffff), clrBack, CUtils::itoa(nCurBit) );
 						break;
 					case TDcfItem::EParity:
 						{
 							int nCheck = GetParity(DcfData[i-1].nStart, DcfData[i-1].nLength);
-							BIOS::LCD::Print( x+8, y, nCheck == nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) ); 
+							BIOS::LCD::Print( x+8, y, nCheck == nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) );
 						}
 						break;
 					case TDcfItem::EParity2:
 						{
 							int nCheck = GetParity(36, 57-36+1);
-							BIOS::LCD::Print( x+8, y, nCheck == nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) ); 
+							BIOS::LCD::Print( x+8, y, nCheck == nCurBit ? RGB565(ffffff) : RGB565(ff0000), clrBack, CUtils::itoa(nCurBit) );
 						}
 						break;
 					case TDcfItem::EBits:
@@ -206,7 +203,7 @@ public:
 						{
 							nCurBit = GetBit(DcfItem.nStart+j);
 							ui16 clrB2 = (DcfItem.nStart+j == m_nBitIndex-1) ? RGB565(b00000) : clrBack;
-							BIOS::LCD::Print( x+j*8+8, y, RGB565(ffffff), clrB2, CUtils::itoa(nCurBit) ); 								
+							BIOS::LCD::Print( x+j*8+8, y, RGB565(ffffff), clrB2, CUtils::itoa(nCurBit) );
 						}
 						break;
 					case TDcfItem::ENumber:
@@ -232,10 +229,10 @@ public:
 			int nSeconds = m_nBitIndex > 0 ? m_nBitIndex : 0;
 
 			if ( m_lDcfAcquired == 0 )
-			{						
-				BIOS::LCD::Printf(20, 240-48-8, RGB565(b0b0b0), 0, "%02d:%02d:%02d %s %d. %s %d      ", 
+			{
+				BIOS::LCD::Printf(20, 240-48-8, RGB565(b0b0b0), 0, "%02d:%02d:%02d %s %d. %s %d      ",
 					nHours, nMinutes, nSeconds, GetWeekday(nWDay), nDay, GetMonth(nMonth), nYear );
-			} 
+			}
 
 			int nPassedTick = BIOS::SYS::GetTick() - nTick;
 			BIOS::LCD::Printf(320, 0x10, RGB565(505050), 0, "upd %d ms  ", nPassedTick );
@@ -266,11 +263,11 @@ public:
 						nWDay = ((nWDay-1+nNewDays) % 7)+1;
 						nHours %= 24;
 						// test nDay ?
-					}	
+					}
 				}
 			}
 
-			BIOS::LCD::Printf(20, 240-48-8, RGB565(ffffff), 0, "%02d:%02d:%02d %s %d. %s %d      ", 
+			BIOS::LCD::Printf(20, 240-48-8, RGB565(ffffff), 0, "%02d:%02d:%02d %s %d. %s %d      ",
 				nHours, nMinutes, nSeconds, GetWeekday(nWDay), nDay, GetMonth(nMonth), nYear );
 		}
 
@@ -310,14 +307,14 @@ public:
 
 	void PushBit(char c)
 	{
-		if ( c == 'E' )	
+		if ( c == 'E' )
 		{
 			m_bWasError = true;
 			m_bError = true;
 			m_nBitIndex = -1;
 			return;
 		}
-		if ( c == 'M' )	
+		if ( c == 'M' )
 		{
 			BIOS::DBG::Print("sync(%d,%d)", m_nBitIndex, m_bWasError);
 			if ( m_nBitIndex == 59 && !m_bWasError )
@@ -344,7 +341,7 @@ public:
 			int nIndex = m_nBitIndex/32;
 			int nMask = (1<<(m_nBitIndex & 31));
 			m_nBitIndex++;
-			             
+
 			m_DcfBits[nIndex] &= ~nMask;
 			if ( c == '1' )
 				m_DcfBits[nIndex] |= nMask;
@@ -368,7 +365,7 @@ public:
 			if ( bSignal ) 	// low to high
 			{
 				// duration of pause
-				// mark is > 1700 
+				// mark is > 1700
 				if ( nImpulseLen > 1700 && nImpulseLen < 2000 )
 					PushBit('M');
 				else
@@ -384,7 +381,7 @@ public:
 					PushBit('1');
 				else
 					PushBit('E');
-			}					
+			}
 		}
 	}
 

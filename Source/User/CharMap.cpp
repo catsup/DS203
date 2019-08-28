@@ -18,7 +18,7 @@ void DrawBig(int _x, int _y, int s, int ch)
 		for (int x=0; x<8; x++)
 		{
 			ui16 clr = nBits & (128>>x) ? RGB565(ffffff) : RGB565(202020);
-			BIOS::LCD::Bar( _x + x*s, _y + y*s, _x + (x+1)*s, _y + (y+1)*s, clr ); 
+			BIOS::LCD::Bar( _x + x*s, _y + y*s, _x + (x+1)*s, _y + (y+1)*s, clr );
 		}
 	}
 
@@ -26,13 +26,13 @@ void DrawBig(int _x, int _y, int s, int ch)
 
 void UpdateChar( int nPos, bool bSel )
 {
-	char str[2] = { nPos, 0 };
+	char str[2] = { (char)nPos, 0 };
 	int bx = nPos % 32;
 	int by = nPos / 32;
 	int x = 42 + bx*11 + ((bx >= 16) ? 4 : 0);
 	int y = 100 + by*16;
 	str[0] = nPos ? nPos : ' ';
-	BIOS::LCD::Print( x, y, bSel ? RGB565(ffffff) : RGB565(b0b0b0), 
+	BIOS::LCD::Print( x, y, bSel ? RGB565(ffffff) : RGB565(b0b0b0),
 		bSel ? RGB565(0000b0) : RGB565(000000), str );
 
 	if ( bSel )
